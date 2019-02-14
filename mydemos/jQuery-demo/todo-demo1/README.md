@@ -923,7 +923,7 @@ var initRenderIndex = function(){
 	}
 ```
 
-
+注：清单应用功能大体实现，存在一个bug是点击删除的时候，弹窗会出现多次，尚未解决好
 
 
 
