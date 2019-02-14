@@ -35,6 +35,7 @@ var myToDoModule = (function(){
 		// 方法1.append 方法2.appendTo
 		$(taskHtmlStr).appendTo($task_list)
 		listenDetail(); // 必须再次注册click事件
+		listenDelete();
 	}
 
 	// 添加 task-item 的方法
@@ -63,6 +64,7 @@ var myToDoModule = (function(){
 			// 渲染完成之后，清空输入框的内容
 			$content.val('');
 			listenDetail(); // 必须再次注册click事件
+			listenDelete();
 	}
 
 	// 添加任务按钮监听事件
@@ -102,6 +104,19 @@ var myToDoModule = (function(){
 			initRenderIndex();
 		})
 	}
+	var listenDelete = function(){
+		$('.delete').click(function(){
+			deleteIndex = task_list.length - 1 - $(this).parent().parent().index();
+			var result = confirm('你确定要删除吗？');
+			if(result){
+				// 第一个是索引，第二个是个数
+				task_list.splice(deleteIndex,1);
+				$(this).parent().parent().remove();
+				store.set('task_list',task_list);
+			}
+		})
+	}
+
 
     //页面初始化就要执行的方法放在initModule里面
     var initModule = function(){
@@ -112,6 +127,7 @@ var myToDoModule = (function(){
 		listenDetail();
 		$datetime.datetimepicker();
 		listenDetailSave();
+		listenDelete();
     }
 
 	return {
