@@ -359,11 +359,138 @@ $(function(){
 })
 ```
 
-##  实现清单应用的删除任务
+##  实现清单应用的更改任务详情
+
+如何实现更改任务详情：
+
+1. 定义`listenDetail`方法，把`listenDetail()`放到`initModule`里面
+2. 定义点击详情和删除的时候记录的索引index`detailIndex、deleteIndex`
+3. 丰富`listenDetail`方法的内容
+   1. 要提前声明并获取好`$task_detail、$detail_content、$desc、$datetime`  对象
+   2. 当鼠标点击详情的时候，找到详情的爸爸的爸爸的索引值`index`
+   3. 使任务详情对象显示，并且显示任务里面对应的内容
+
+```js
+var myToDoModule = (function(){
+	// 定义变量
+	var task_list = [];
+	var $task_list,$content,$addTaskSubmit,$task_detail,$detail_content,$desc,$datetime;
+	var detailIndex,deleteIndex; // 定义点击详情和删除的时候记录的索引index
+
+	// 初始化jquery对象
+    var initJqVar = function(){
+		$task_list = $('.task-list');
+		$content = $('.content');
+		$addTaskSubmit = $('.addTaskSubmit');
+		$task_detail = $('.task-detail');
+		$detail_content = $('.detail-content');
+		$desc = $('.desc');
+		$datetime = $('.datetime');
+	}
+	// 页面初始化的时候，从store中取出item，并渲染
+	var initRenderIndex = function(){
+		$task_list.html('');
+		task_list = store.get('task_list') || [];
+		var taskHtmlStr = '';
+		for (var i = task_list.length-1; i >= 0; i--) {
+			var oneItem = '<li class="task-item">'+
+						'<span><input type="checkbox"></span>'+
+						'<span class="item-content">'+ task_list[i].content +'</span>'+
+						'<span class="fr">'+
+						'	<span class="action detail">详情</span>'+
+						'	<span class="action delete">删除</span>'+
+						'</span>'+
+					'</li>';
+			taskHtmlStr += oneItem;
+		}
+		// 把最后的结果添加到$task_list节点的里面
+		// 方法1.append 方法2.appendTo
+		$(taskHtmlStr).appendTo($task_list)
+	}
+
+	// 添加 task-item 的方法
+	var addTask = function(){
+		var new_task = {};
+		// 获取输入框的内容
+		new_task.content = $content.val();
+		// 更新数组操作
+		task_list.push(new_task);
+		store.set('task_list',task_list);
+		// 渲染新添加的数据
+		renderOneItem(new_task);
+	}
+
+	// 向html列表中新添加一条记录
+	var renderOneItem = function(new_task){
+		var oneItem = '<li class="task-item">'+
+				'<span><input type="checkbox"></span>'+
+				'<span class="item-content">'+ new_task.content +'</span>'+
+				'<span class="fr">'+
+				'	<span class="action detail">详情</span>'+
+				'	<span class="action delete">删除</span>'+
+				'</span>'+
+			'</li>';
+			$(oneItem).prependTo($task_list);
+			// 渲染完成之后，清空输入框的内容
+			$content.val('');
+	}
+
+	// 添加任务按钮监听事件
+	var listenAddTaskItem = function(){
+		$addTaskSubmit.click(function(){
+			addTask()
+		});
+	}
+
+	// 点击任务详情编辑任务明细
+	var listenDetail = function(){
+		$('.detail').click(function(){
+			detailIndex = task_list.length - 1 - $(this).parent().parent().index();
+			$task_detail.show();
+			$detail_content.val(task_list[detailIndex].content);
+			$desc.val(task_list[detailIndex].desc);
+			$datetime.val(task_list[detailIndex].datetime);
+		})
+	}
+
+    //页面初始化就要执行的方法放在initModule里面
+    var initModule = function(){
+		// store.set('task_list',task_list)
+		initJqVar();
+		initRenderIndex();
+		listenAddTaskItem();
+		listenDetail();
+        // 应用日历插件
+		$datetime.datetimepicker();
+    }
+
+	return {
+		initModule : initModule
+	}
 
 
+})();
 
+$(function(){
+	myToDoModule.initModule();
+})
+```
 
+##  实现清单应用的保存任务详情
+
+如何实现保存任务详情操作：
+
+1. 要提前声明并获取好`$detail_submit`  对象
+
+2. 添加 `listenDetailSave` 的方法，把`listenDetailSave()`放到`initModule`里面
+
+3. 丰富`listenDetailSave`方法的内容
+
+   
+
+我刷新了页面，首先在页面加载了一批`item`，给加载好的`item`注册了详情的点击事件，**只注册了一次**
+
+点了提交之后，先清空`task_list`，又**重新加载**了一批`item`，并没有再次注册 详情点击事件，所以需要再次注册-- 详情点击事件
 
 ## 技巧
 
@@ -447,7 +574,66 @@ for (var i = task_list.length-1; i >= 0; i--) {
 }
 ```
 
+### 坑四：通过jq方法获取到的索引值，并不是真正的索引值
 
+原因是因为我遍历的数组的时候，是采用降序遍历的，而使用jq方法获取的索引值是从上往下排的，从索引0到索引`length-1`，升序排列的，因此
+
+修改前的代码：
+
+```js
+var listenDetail = function(){
+    $('.detail').click(function(){
+        detailIndex = $(this).parent().parent().index();
+        alert(detailIndex);
+    })
+}
+```
+
+修改后的代码：
+
+```js
+var listenDetail = function(){
+    $('.detail').click(function(){
+        detailIndex = task_list.length - 1 - $(this).parent().parent().index();
+			alert(detailIndex)
+    })
+}
+```
+
+### 坑五：第一次点击详情按钮会有效果，第二次点击的话会没有效果出现
+
+原因：我刷新了页面，首先在页面加载了一批`item`，给加载好的`item`注册了详情的点击事件，**只注册了一次**
+
+点了提交之后，先清空`task_list`，又**重新加载**了一批`item`，并没有再次注册 详情点击事件，所以需要再次注册-- 详情点击事件
+
+重点：重新渲染页面，没有重新绑定`listenDetail`事件
+
+新添加的同样道理
+
+解决办法如下：**必须再次注册click事件**
+
+```js
+var initRenderIndex = function(){
+		$task_list.html('');
+		task_list = store.get('task_list') || [];
+		var taskHtmlStr = '';
+		for (var i = task_list.length-1; i >= 0; i--) {
+			var oneItem = '<li class="task-item">'+
+						'<span><input type="checkbox"></span>'+
+						'<span class="item-content">'+ task_list[i].content +'</span>'+
+						'<span class="fr">'+
+						'	<span class="action detail">详情</span>'+
+						'	<span class="action delete">删除</span>'+
+						'</span>'+
+					'</li>';
+			taskHtmlStr += oneItem;
+		}
+		// 把最后的结果添加到$task_list节点的里面
+		// 方法1.append 方法2.appendTo
+		$(taskHtmlStr).appendTo($task_list)
+		listenDetail(); // 必须再次注册click事件
+	}
+```
 
 
 

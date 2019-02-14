@@ -1,13 +1,19 @@
 var myToDoModule = (function(){
 	// 定义变量
 	var task_list = [];
-	var $task_list,$content,$addTaskSubmit;
+	var $task_list,$content,$addTaskSubmit,$task_detail,$detail_content,$desc,$datetime,$detail_submit;
+	var detailIndex,deleteIndex; // 定义点击详情和删除的时候记录的索引index
 
 	// 初始化jquery对象
     var initJqVar = function(){
 		$task_list = $('.task-list');
 		$content = $('.content');
 		$addTaskSubmit = $('.addTaskSubmit');
+		$task_detail = $('.task-detail');
+		$detail_content = $('.detail-content');
+		$desc = $('.desc');
+		$datetime = $('.datetime');
+		$detail_submit = $('.detail-submit');
 	}
 	// 页面初始化的时候，从store中取出item，并渲染
 	var initRenderIndex = function(){
@@ -28,6 +34,7 @@ var myToDoModule = (function(){
 		// 把最后的结果添加到$task_list节点的里面
 		// 方法1.append 方法2.appendTo
 		$(taskHtmlStr).appendTo($task_list)
+		listenDetail(); // 必须再次注册click事件
 	}
 
 	// 添加 task-item 的方法
@@ -55,6 +62,7 @@ var myToDoModule = (function(){
 			$(oneItem).prependTo($task_list);
 			// 渲染完成之后，清空输入框的内容
 			$content.val('');
+			listenDetail(); // 必须再次注册click事件
 	}
 
 	// 添加任务按钮监听事件
@@ -64,12 +72,46 @@ var myToDoModule = (function(){
 		});
 	}
 
+	// 点击任务详情编辑任务明细
+	var listenDetail = function(){
+		$('.detail').click(function(){
+			detailIndex = task_list.length - 1 - $(this).parent().parent().index();
+			$task_detail.show();
+			$detail_content.val(task_list[detailIndex].content);
+			$desc.val(task_list[detailIndex].desc);
+			$datetime.val(task_list[detailIndex].datetime);
+		})
+	}
+	// 保存修改后的任务详情
+	var listenDetailSave = function(){
+		$detail_submit.click(function(){
+			var dataTask = {};
+			dataTask.content = $detail_content.val();
+			dataTask.desc = $desc.val();
+			dataTask.datetime = $datetime.val();
+			// 修改后的对象和原来的对象合并 $.extend(jsonObj1,jsonObj2)
+			// 相当于更新了对象
+			task_list[detailIndex] = $.extend(task_list[detailIndex],dataTask)
+			store.set('task_list',task_list)
+			// 清空数据
+			$detail_content.val('');
+			$desc.val('');
+			$datetime.val('');
+			$task_detail.hide();
+			// 重新渲染页面
+			initRenderIndex();
+		})
+	}
+
     //页面初始化就要执行的方法放在initModule里面
     var initModule = function(){
 		// store.set('task_list',task_list)
 		initJqVar();
 		initRenderIndex();
 		listenAddTaskItem();
+		listenDetail();
+		$datetime.datetimepicker();
+		listenDetailSave();
     }
 
 	return {
