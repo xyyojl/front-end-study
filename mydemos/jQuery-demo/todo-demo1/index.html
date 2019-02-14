@@ -12,12 +12,13 @@
 <body>
     <div class="container">
         <h1>MyToDo</h1>
-        <form class="clearfix add-task">
+        <!-- action="javascript: return false" -->
+        <form class="clearfix add-task"  onsubmit="return false">
             <input type="text" class="content">
             <button class="addTaskSubmit">submit</button>
         </form>
         <ul class="task-list">
-            <li class="task-item">
+            <!-- <li class="task-item">
                 <span><input type="checkbox"></span>
                 <span class="item-content">啦啦啦啦啦啦啦啦啦啦</span>
                 <span class="fr">
@@ -32,7 +33,7 @@
                     <span class="action detail">详情</span>
                     <span class="action delete">删除</span>
                 </span>
-            </li>
+            </li> -->
         </ul>
     </div>
     <div class="task-detail">
@@ -45,8 +46,8 @@
         <button class="detail-submit">提交</button>
     </div>
 
-    <script src="./js/jquery.datetimepicker.full.js"></script>
     <script src="./js/jquery.js"></script>
+    <script src="./js/jquery.datetimepicker.full.js"></script>
     <script src="./js/store.js"></script>
     <script src="./js/base.js"></script>
 </body>
