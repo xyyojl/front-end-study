@@ -14,7 +14,7 @@ var myToDoModule = (function(){
 		$task_list.html('');
 		task_list = store.get('task_list') || [];
 		var taskHtmlStr = '';
-		for (var i = 0; i < task_list.length; i++) {
+		for (var i = task_list.length-1; i >= 0; i--) {
 			var oneItem = '<li class="task-item">'+
 						'<span><input type="checkbox"></span>'+
 						'<span class="item-content">'+ task_list[i].content +'</span>'+
@@ -57,16 +57,19 @@ var myToDoModule = (function(){
 			$content.val('');
 	}
 
-
+	// 添加任务按钮监听事件
+	var listenAddTaskItem = function(){
+		$addTaskSubmit.click(function(){
+			addTask()
+		});
+	}
 
     //页面初始化就要执行的方法放在initModule里面
     var initModule = function(){
 		// store.set('task_list',task_list)
 		initJqVar();
 		initRenderIndex();
-		$addTaskSubmit.click(function(){
-			addTask()
-		});
+		listenAddTaskItem();
     }
 
 	return {
