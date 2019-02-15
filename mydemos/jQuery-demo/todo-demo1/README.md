@@ -526,8 +526,10 @@ var myToDoModule = (function(){
 		// 把最后的结果添加到$task_list节点的里面
 		// 方法1.append 方法2.appendTo
 		$(taskHtmlStr).appendTo($task_list)
-		listenDetail(); // 必须再次注册click事件
-		listenDelete();
+        // 不能在这里执行下面两条命令，否则弹窗就会弹出好几次
+		/* listenDetail(); 
+		listenDelete(); */
+
 	}
 
 	// 添加 task-item 的方法
@@ -556,7 +558,6 @@ var myToDoModule = (function(){
 			// 渲染完成之后，清空输入框的内容
 			$content.val('');
 			listenDetail(); // 必须再次注册click事件
-			listenDelete();
 	}
 
 	// 添加任务按钮监听事件
@@ -594,6 +595,7 @@ var myToDoModule = (function(){
 			$task_detail.hide();
 			// 重新渲染页面
 			initRenderIndex();
+            listenDetail(); // 必须再次注册click事件
 		})
 	}
 
@@ -671,8 +673,9 @@ var myToDoModule = (function(){
 		// 把最后的结果添加到$task_list节点的里面
 		// 方法1.append 方法2.appendTo
 		$(taskHtmlStr).appendTo($task_list)
-		listenDetail(); // 必须再次注册click事件
-		listenDelete();
+        // 不能在这里执行下面两条命令，否则弹窗就会弹出好几次
+		/* listenDetail(); 
+		listenDelete(); */
 	}
 
 	// 添加 task-item 的方法
@@ -739,6 +742,8 @@ var myToDoModule = (function(){
 			$task_detail.hide();
 			// 重新渲染页面
 			initRenderIndex();
+            listenDetail(); // 必须再次注册click事件
+			listenDelete();
 		})
 	}
 	var listenDelete = function(){
