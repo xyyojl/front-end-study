@@ -526,7 +526,7 @@ var myToDoModule = (function(){
 		// 把最后的结果添加到$task_list节点的里面
 		// 方法1.append 方法2.appendTo
 		$(taskHtmlStr).appendTo($task_list)
-        // 不能在这里执行下面两条命令，否则弹窗就会弹出好几次
+        // 不能在这里执行下面两条命令，否则弹窗就会弹出好几次，请看坑六
 		/* listenDetail(); 
 		listenDelete(); */
 
@@ -673,7 +673,7 @@ var myToDoModule = (function(){
 		// 把最后的结果添加到$task_list节点的里面
 		// 方法1.append 方法2.appendTo
 		$(taskHtmlStr).appendTo($task_list)
-        // 不能在这里执行下面两条命令，否则弹窗就会弹出好几次
+        // 不能在这里执行下面两条命令，否则弹窗就会弹出好几次，请看坑六
 		/* listenDetail(); 
 		listenDelete(); */
 	}
@@ -782,7 +782,6 @@ var myToDoModule = (function(){
 $(function(){
 	myToDoModule.initModule();
 })
-
 ```
 
 ## 技巧
@@ -928,7 +927,176 @@ var initRenderIndex = function(){
 	}
 ```
 
-注：清单应用功能大体实现，存在一个bug是点击删除的时候，弹窗会出现多次，尚未解决好
+### 坑六：为什么新增任务后，点击之前的任务的删除按钮的时候，弹窗就会弹出好几次
+
+原因是：还是直接看代码吧
+
+修改前的代码：
+
+```js
+// 页面初始化的时候，从store中取出item，并渲染
+var initRenderIndex = function(){
+    $task_list.html('');
+    task_list = store.get('task_list') || [];
+    var taskHtmlStr = '';
+    for (var i = task_list.length-1; i >= 0; i--) {
+        var oneItem = '<li class="task-item">'+
+            '<span><input type="checkbox"></span>'+
+            '<span class="item-content">'+ task_list[i].content +'</span>'+
+            '<span class="fr">'+
+            '	<span class="action detail">详情</span>'+
+            '	<span class="action delete">删除</span>'+
+            '</span>'+
+            '</li>';
+        taskHtmlStr += oneItem;
+    }
+    // 把最后的结果添加到$task_list节点的里面
+    // 方法1.append 方法2.appendTo
+    $(taskHtmlStr).appendTo($task_list)
+    listenDetail(); 
+	listenDelete();
+}
+
+// 向html列表中新添加一条记录
+var renderOneItem = function(new_task){
+    var oneItem = '<li class="task-item">'+
+        '<span><input type="checkbox"></span>'+
+        '<span class="item-content">'+ new_task.content +'</span>'+
+        '<span class="fr">'+
+        '	<span class="action detail">详情</span>'+
+        '	<span class="action delete">删除</span>'+
+        '</span>'+
+        '</li>';
+    $(oneItem).prependTo($task_list);
+    // 渲染完成之后，清空输入框的内容
+    $content.val('');
+    listenDetail(); // 必须再次注册click事件
+    listenDelete();
+}
+// 保存修改后的任务详情
+	var listenDetailSave = function(){
+		$detail_submit.click(function(){
+			var dataTask = {};
+			dataTask.content = $detail_content.val();
+			dataTask.desc = $desc.val();
+			dataTask.datetime = $datetime.val();
+			// 修改后的对象和原来的对象合并 $.extend(jsonObj1,jsonObj2)
+			// 相当于更新了对象
+			task_list[detailIndex] = $.extend(task_list[detailIndex],dataTask)
+			store.set('task_list',task_list)
+			// 清空数据
+			$detail_content.val('');
+			$desc.val('');
+			$datetime.val('');
+			$task_detail.hide();
+			// 重新渲染页面
+			initRenderIndex();
+		})
+	}
+```
+
+原因其实是当保存任务详情的时候，会重新渲染页面，而此时的每一个小任务都不是之前的任务了，需要重新执行`listenDetail、listenDelete`方法，这样原来是没有问题的，但是当新增一条任务之后，又再次执行`listenDetail、listenDelete`事件，所以就会出现这样的问题。
+
+我想了一个小技巧，就是把`listenDetail(); listenDelete();`这两个方法执行放到了**`listenDetailSave`方法里面的重新渲染页面**之后，而没有直接放到`initRenderIndex`方法里面，就不会用多次执行事件啦
+
+修改后的代码：
+
+```js
+// 页面初始化的时候，从store中取出item，并渲染
+var initRenderIndex = function(){
+    $task_list.html('');
+    task_list = store.get('task_list') || [];
+    var taskHtmlStr = '';
+    for (var i = task_list.length-1; i >= 0; i--) {
+        var oneItem = '<li class="task-item">'+
+            '<span><input type="checkbox"></span>'+
+            '<span class="item-content">'+ task_list[i].content +'</span>'+
+            '<span class="fr">'+
+            '	<span class="action detail">详情</span>'+
+            '	<span class="action delete">删除</span>'+
+            '</span>'+
+            '</li>';
+        taskHtmlStr += oneItem;
+    }
+    // 把最后的结果添加到$task_list节点的里面
+    // 方法1.append 方法2.appendTo
+    $(taskHtmlStr).appendTo($task_list)
+    // 不能在这里执行下面两条命令，否则弹窗就会弹出好几次
+    /* listenDetail(); 
+		listenDelete(); */
+}
+
+// 添加 task-item 的方法
+var addTask = function(){
+    var new_task = {};
+    // 获取输入框的内容
+    new_task.content = $content.val();
+    // 更新数组操作
+    task_list.push(new_task);
+    store.set('task_list',task_list);
+    // 渲染新添加的数据
+    renderOneItem(new_task);
+}
+
+// 向html列表中新添加一条记录
+var renderOneItem = function(new_task){
+    var oneItem = '<li class="task-item">'+
+        '<span><input type="checkbox"></span>'+
+        '<span class="item-content">'+ new_task.content +'</span>'+
+        '<span class="fr">'+
+        '	<span class="action detail">详情</span>'+
+        '	<span class="action delete">删除</span>'+
+        '</span>'+
+        '</li>';
+    $(oneItem).prependTo($task_list);
+    // 渲染完成之后，清空输入框的内容
+    $content.val('');
+    listenDetail(); // 必须再次注册click事件
+    listenDelete();
+}
+
+// 添加任务按钮监听事件
+var listenAddTaskItem = function(){
+    $addTaskSubmit.click(function(){
+        addTask()
+    });
+}
+
+// 点击任务详情编辑任务明细
+var listenDetail = function(){
+    $('.detail').click(function(){
+        detailIndex = task_list.length - 1 - $(this).parent().parent().index();
+        $task_detail.show();
+        $detail_content.val(task_list[detailIndex].content);
+        $desc.val(task_list[detailIndex].desc);
+        $datetime.val(task_list[detailIndex].datetime);
+    })
+}
+// 保存修改后的任务详情
+var listenDetailSave = function(){
+    $detail_submit.click(function(){
+        var dataTask = {};
+        dataTask.content = $detail_content.val();
+        dataTask.desc = $desc.val();
+        dataTask.datetime = $datetime.val();
+        // 修改后的对象和原来的对象合并 $.extend(jsonObj1,jsonObj2)
+        // 相当于更新了对象
+        task_list[detailIndex] = $.extend(task_list[detailIndex],dataTask)
+        store.set('task_list',task_list)
+        // 清空数据
+        $detail_content.val('');
+        $desc.val('');
+        $datetime.val('');
+        $task_detail.hide();
+        // 重新渲染页面
+        initRenderIndex();
+        listenDetail(); // 必须再次注册click事件
+		listenDelete();
+    })
+}
+```
+
+注：清单应用功能大体实现，之前存在的bug已经解决好了，还可以新增其他功能，并完善细节
 
 
 

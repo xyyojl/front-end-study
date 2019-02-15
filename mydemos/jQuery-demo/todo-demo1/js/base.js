@@ -103,8 +103,8 @@ var myToDoModule = (function(){
 			$task_detail.hide();
 			// 重新渲染页面
 			initRenderIndex();
-			listenDetail(); // 必须再次注册click事件
-			listenDelete();
+			/* listenDetail(); // 必须再次注册click事件
+			listenDelete(); */
 		})
 	}
 	var listenDelete = function(){
