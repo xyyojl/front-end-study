@@ -139,7 +139,7 @@ ctrl+C
 
 ## 2-1 整体布局
 
-其实就是用html实现整体布局，下面是代码展示：
+其实就是用`html`实现整体布局，下面是代码展示：
 
 注：下面的代码只是暂时写好，之后可能会做出修改
 
@@ -200,6 +200,179 @@ ctrl+C
 ```
 
 ## 3-1 细节完善
+
+涉及到样式表之前，需要重置浏览器的默认样式，比如`body`的`margin: 8px`，如果一个一个针对重置样式，只需要用别人做的东西即可
+
+### “reset” 和 “normalize” CSS 之间的区别？你会如何选择，为什么？
+
+normalize 相对「平和」，注重通用的方案，重置掉该重置的样式，保留有用的 user agent 样式，同时进行一些 bug 的修复，这点是 reset 所缺乏的。 
+
+Reset 相对「暴力」，不管你有没有用，统统重置成一样的效果，且影响的范围很大，讲求跨浏览器的一致性。 [来，让我们谈一谈 normalize.css](http://jerryzou.com/posts/aboutnormalizeCss/)
+
+normalize.css是一种CSS reset的替代方案。它们的区别有：
+
+- normalize.css 保护了有价值的默认值，Reset通过为几乎所有的元素施加默认样式，强行使得元素有相同的视觉效果。相比之下，normalize.css保持了许多默认的浏览器样式。这就意味着你不用再为所有公共的排版元素重新设置样式。当一个元素在不同的浏览器中有不同的默认值时，normalize.css会力求让这些样式保持一致并尽可能与现代标准相符合。
+- normalize.css 修复了浏览器的bug，它修复了常见的桌面端和移动端浏览器的bug。这往往超出了Reset所能做到的范畴。关于这一点，normalize.css修复的问题包含了HTML5元素的显示设置、预格式化文字的font-size问题、在IE9中SVG的溢出、许多出现在各浏览器和操作系统中的与表单相关的bug。
+- normalize.css 不会让你的调试工具变的杂乱
+- normalize.css 是模块化的
+- normalize.css 拥有详细的文档
+
+选择normalize.css ，主要是reset.css为几乎所有的元素施加默认样式，所以需要对所有公共的排版元素重新设置样式，这是一件很麻烦的工作。
+
+### 上[bootcdn](https://www.bootcdn.cn/normalize/)，下载normalize.css，或者在线引用都可以。
+
+注：引用normalize.css的时候一定要卸载自己写的css之前。
+
+其实就是用`css`实现界面美化，下面是代码展示：
+
+注：下面的代码只是暂时写好，之后可能会做出修改
+
+```css
+*{
+    box-sizing: border-box;
+    transition: background 0.2s;
+    outline: 0;
+}
+body{
+    background-color: #00334b;
+    color: #fff;
+    padding:0 10px;
+}
+
+/* 先用html布局，然后再用css美化界面 */
+.container{
+    max-width: 700px; /* max-width 比较灵活，不会写死 */
+    margin: 0 auto;
+    position: relative;
+}
+h1{
+    text-align: center;
+}
+input,
+.task-item,
+.task-detail-mask,
+button,
+textarea{
+    padding: 10px;
+    border-radius: 3px;
+}
+textarea,
+input[type=text],
+input[type=date],
+button{
+    border: 0;
+}
+input[type=text],
+input[type=date],
+textarea{
+    width: 100%;
+    display: block;
+    background: #ddd;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.3);
+}
+input[type=text]:hover,
+input[type=date]:hover,
+input[type=text]:focus,
+input[type=date]:focus{
+    background: #fff;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
+}
+button{
+    display: inline-block;
+    border: 0;
+    cursor: pointer;
+    color: #333;
+}
+.add-task input[type=text]{
+    float: left;
+    width: 84%;
+    margin-right: 1%;
+}
+.add-task [type=submit]{
+    width: 15%;
+    background: #46b1e4;
+}
+.add-task [type=submit]:hover{
+    background: #5FB9E4;
+}
+.add-task [type=submit],
+.task-item{
+    box-shadow: 0 2px 3px rgba(0,0,0,.4);
+}
+.task-list{
+    margin: 10px 0;
+}
+.task-item{
+    background-color: #fff;
+    color: #333;
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+.task-item:hover{
+    background: #ddd;
+}
+.task-detail-mask,.task-detail{
+    position: absolute;
+    display: none;
+}
+.task-detail{
+    top: 0;
+    right: 0;
+    padding: 10px;
+    background: #fff;
+    width: 50%;
+    height: 320px;
+    color: #333;
+}
+.task-detail .content{
+    padding: 10px;
+    font-weight: 900;
+    cursor: pointer;
+}
+.task-detail *{
+    margin-bottom: 10px;
+}
+.task-detail textarea{
+    min-height: 100px;
+    resize: none;
+}
+.task-detail-mask{
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(30,30,30,.6);
+}
+.action {
+	color:#888;
+	font-size:90%;
+}
+
+.action:hover {
+	color:#333;
+}
+
+.task-content {
+	margin-left:10px;
+}
+
+.fr {
+	float:right;
+}  
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

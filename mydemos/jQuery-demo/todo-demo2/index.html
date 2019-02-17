@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>MyToDo</title>
+    <link rel="stylesheet" href="./css/normalize.css">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 
@@ -12,8 +13,8 @@
     <div class="container"><!-- 总容器开始 -->
         <h1>MyToDo</h1>
         <form action="" class="add-task">
-            <input type="text">
-            <button>submit</button>
+            <input type="text" placeholder="e.g. 下午记得买菜" name="content">
+            <button type="submit">submit</button>
         </form>
         <div class="task-list"><!-- 清单列表开始 -->
             <div class="task-item"><!-- 任务开始 -->
@@ -35,10 +36,13 @@
                 <span class="action detail">detail</span>
             </div><!-- 任务结束 -->
         </div><!-- 清单列表结束 -->
+        <div class="task-detail-mask"></div>
         <div class="task-detail"><!-- 任务详情开始 -->
-            <div class="content"></div><!-- 任务标题 -->
+            <div class="content">下午记得买菜</div><!-- 任务标题 -->
             <div><!-- 任务描述开始 -->
-                <div class="desc"></div>
+                <div class="desc">
+                    <textarea></textarea>
+                </div>
             </div><!-- 任务描述结束 -->
             <div class="remind"><!-- 任务定时提醒时间开始 -->
                 <input type="date">
