@@ -137,6 +137,70 @@ ctrl+C
 
 结束之前，你引入的库的一个东西，有可能他之前写的一些内容，后头没有加分号，忘了去结束那个语句，然而有时候在你把代码压缩混淆过之后，前头没有分号，再加上你引入的文件后面没有用分号结束语句，可能就会报错。这样写的话，就可以避免这个问题。
 
+## 2-1 整体布局
+
+其实就是用html实现整体布局，下面是代码展示：
+
+注：下面的代码只是暂时写好，之后可能会做出修改
+
+```html
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MyToDo</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <div class="container"><!-- 总容器开始 -->
+        <h1>MyToDo</h1>
+        <form action="" class="add-task">
+            <input type="text">
+            <button>submit</button>
+        </form>
+        <div class="task-list"><!-- 清单列表开始 -->
+            <div class="task-item"><!-- 任务开始 -->
+                <span><input type="checkbox"></span>
+                <span class="task-content">item content 1</span>
+                <span class="action delete">delete</span>
+                <span class="action detail">detail</span>
+            </div><!-- 任务结束 -->
+            <div class="task-item"><!-- 任务开始 -->
+                <span><input type="checkbox"></span>
+                <span class="task-content">item content 1</span>
+                <span class="action delete">delete</span>
+                <span class="action detail">detail</span>
+            </div><!-- 任务结束 -->
+            <div class="task-item"><!-- 任务开始 -->
+                <span><input type="checkbox"></span>
+                <span class="task-content">item content 1</span>
+                <span class="action delete">delete</span>
+                <span class="action detail">detail</span>
+            </div><!-- 任务结束 -->
+        </div><!-- 清单列表结束 -->
+        <div class="task-detail"><!-- 任务详情开始 -->
+            <div class="content"></div><!-- 任务标题 -->
+            <div><!-- 任务描述开始 -->
+                <div class="desc"></div>
+            </div><!-- 任务描述结束 -->
+            <div class="remind"><!-- 任务定时提醒时间开始 -->
+                <input type="date">
+                <button type="submit">submit</button>
+            </div><!-- 任务定时提醒时间结束 -->
+        </div><!-- 任务详情结束 -->
+    </div><!-- 总容器结束 -->
+
+    <script src="./lib/jquery.min.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+</html>
+```
+
+## 3-1 细节完善
+
 
 
 
