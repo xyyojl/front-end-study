@@ -61,6 +61,16 @@ kbd标签里面什么都没有
 
 
 
+涉及到3个新知识
+
+- `document.createElement`
+- appendChild
+- textContent
+- location.href ，模拟用户地址栏输入
+- window.open，模拟用户打开一个新窗口
+
+
+
 参考一个并不好看的网站：<http://www.36start.com/>
 
 1. 选择数据结构
