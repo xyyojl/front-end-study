@@ -14,15 +14,26 @@ body{
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	min-width: 1200px;
+	font-family: 'Simsun','Arial',sans-serif;
 }
 .wrapper{
-	padding: 40px 20px;
 	background: rgba(255,255,255,0.2);
 	border-radius: 10px;
+	padding: 40px 20px 80px 20px;
 }
 .searchBar{
 	margin: 10px auto 100px auto;
 	display: flex;
+}
+.hat{
+	position: absolute;
+	top:-18px;
+	left:-18px;
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	background: url(./hat.svg) center/100% no-repeat;
 }
 .searchBar>.inputBar{
 	position: relative;
@@ -30,10 +41,10 @@ body{
 .searchBar>.inputBar>ul>li{
 	display: none;
 	position: absolute;
-	right: 18px;
-	top: 7px;
-	width: 30px;
-	height: 30px;
+	right: 16px;
+	top:10px;
+	width:24px;
+	height:24px;
 }
 .searchBar>.inputBar>ul>li.active{
 	display: inline-block;
@@ -49,8 +60,8 @@ body{
 	width: 20px;
 	height: 20px;
 	position: absolute;
-	top: 5px;
-	right: -18px;
+	top: 2px;
+	right: -16px;
 }
 .searchBar>.inputBar>ul:hover{
 	cursor: pointer;
@@ -59,14 +70,18 @@ body{
 	width: 585px;
 	outline: none;
 	font-size: 16px;
-	padding: 12px 16px;
 	border-radius: 4px;
 	border: 1px solid #e9eae9;
 	box-shadow: 0 1px 8px #e1e2e1;
 	transition: all .3s;
+	padding: 12px 45px 12px 16px;
+	line-height: 18px;
 }
 .searchBar>.inputBar>#keyword:hover{
 	box-shadow: 0 3px 8px 2px #e1e2e1;
+}
+.searchBar>.inputBar>#keyword::placeholder{
+	color: #C4C5C4;
 }
 .searchBar>.searchSwitch{
 	margin-left: 10px;
@@ -74,15 +89,22 @@ body{
 .searchBar>.searchSwitch>input[name="button"]{
 	font-size: 16px;
 	line-height: 20px;
-	padding: 10px 0;
+	padding: 12px 0;
 	width: 120px;
 	background: #c5c5c5;
 	border: 1px solid #ddd;
 	border-radius: 3px;
 	outline: none;
+	border-radius: 2px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	transition: all .3s;
+	color: #8C8F8F;
 }
 .searchBar>.searchSwitch>input[name="button"]:hover{
 	cursor: pointer;
+	box-shadow: 1px 1px 4px #C7C8C7;
+	background: #DADBDA;
 }
 
 
@@ -142,6 +164,9 @@ main{
 	font-size: 20px;
 	position: relative;
 }
+.key.down{
+	margin: 0 8px -2px 12px
+}
 .key img{
 	width:16px;
 	height: 16px;
@@ -160,7 +185,7 @@ main{
 }
 .key>button{
 	border-radius: 3px;
-	font-size: 2px;
+	font-size: 14px;
 	border:none;
 	color: #c5c5c5;
 	background-color: #292929;
