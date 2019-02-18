@@ -114,14 +114,25 @@ function createImage(domain) {
  
 // 监听用户事件的函数
 function listenToUser(hash) {
-    document.onkeypress = function(e){
-        var key = e['key'];
-        var website = hash[key];
-        //location.href='http://'+website
-        //location代表地址栏，href代表地址
-        window.open('http://'+website,'_blank');
-        //新窗口打开网页
-    }
+    var inputBar = document.querySelector('#keyword');
+    var inputting = true;
+    inputBar.addEventListener('focus',function(e){
+        inputting = true;
+    })
+    inputBar.addEventListener('focusout',function(e){
+        inputting = false;
+        document.onkeypress = function(e){
+            var key = e['key'];
+            var website = hash[key];
+            //location.href='http://'+website
+            //location代表地址栏，href代表地址
+            if(!inputting){
+                window.open('http://'+website,'_blank');
+                //新窗口打开网页
+            }
+        }
+    })
+
 }
 // 切换搜索引擎
 function switchSearchEngin() {
