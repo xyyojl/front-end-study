@@ -1,5 +1,12 @@
 *{margin:0;padding: 0;}
 a{text-decoration: none;}
+ul{list-style: none;}
+.icon {
+	width: 1em; height: 1em;
+	vertical-align: -0.15em;
+	fill: currentColor;
+	overflow: hidden;
+}
 body{
 	height: 100vh;
 	background: url(../image/chinese.png) grey center center no-repeat;
@@ -13,6 +20,76 @@ body{
 	background: rgba(255,255,255,0.2);
 	border-radius: 10px;
 }
+.searchBar{
+	margin: 10px auto 100px auto;
+	display: flex;
+}
+.searchBar>.inputBar{
+	position: relative;
+}
+.searchBar>.inputBar>ul>li{
+	display: none;
+	position: absolute;
+	right: 18px;
+	top: 7px;
+	width: 30px;
+	height: 30px;
+}
+.searchBar>.inputBar>ul>li.active{
+	display: inline-block;
+}
+.searchBar>.inputBar>ul>li:nth-child(1){
+	background: url(../image/baidu.svg) center no-repeat;
+	background-size: 100%;
+}
+.searchBar>.inputBar>ul>li:nth-child(2){
+	background: url(../image/google.svg);
+}
+.searchBar>.inputBar>ul>li>.icon{
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: 5px;
+	right: -18px;
+}
+.searchBar>.inputBar>ul:hover{
+	cursor: pointer;
+}
+.searchBar>.inputBar>#keyword{
+	width: 585px;
+	outline: none;
+	font-size: 16px;
+	padding: 12px 16px;
+	border-radius: 4px;
+	border: 1px solid #e9eae9;
+	box-shadow: 0 1px 8px #e1e2e1;
+	transition: all .3s;
+}
+.searchBar>.inputBar>#keyword:hover{
+	box-shadow: 0 3px 8px 2px #e1e2e1;
+}
+.searchBar>.searchSwitch{
+	margin-left: 10px;
+}
+.searchBar>.searchSwitch>input[name="button"]{
+	font-size: 16px;
+	line-height: 20px;
+	padding: 10px 0;
+	width: 120px;
+	background: #c5c5c5;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	outline: none;
+}
+.searchBar>.searchSwitch>input[name="button"]:hover{
+	cursor: pointer;
+}
+
+
+
+
+
+
 kbd{
 	border:1px solid red;
 	width: 6em;
@@ -34,7 +111,10 @@ header{
 }
 main{
 	text-align: center;
-
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 #main{

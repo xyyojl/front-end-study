@@ -7,6 +7,7 @@ generateKeyboard(keys,hash);
 
 // 3. 监听用户动作
 listenToUser(hash);
+switchSearchEngin();
 
 // 下面的是封装的函数
 // 初始化数据相关的函数
@@ -121,4 +122,39 @@ function listenToUser(hash) {
         window.open('http://'+website,'_blank');
         //新窗口打开网页
     }
+}
+// 切换搜索引擎
+function switchSearchEngin() {
+    var baidu = true;
+    var searchEngin = document.querySelector('#searchEngin');
+    var logo = document.querySelector('#searchEngin>li:nth-child(1)');
+    var searchButton = document.querySelector('#searchButton');
+    var currentEngin = document.querySelector('.searchBar');
+    var inputBar = document.querySelector('#keyword');
+    // 添加读取输入信息功能
+    var searchWhat='';
+    inputBar.addEventListener('input',function(){
+        searchWhat=document.getElementById('keyword').value;		
+    })
+    searchEngin.addEventListener('click',function(){
+        console.log(baidu);
+        console.log(currentEngin);
+        console.log(logo)
+        if(baidu){
+            logo.classList.remove('active');
+            logo = document.querySelector('#searchEngin>li:nth-child(2)');
+            logo.classList.add('active');
+            searchButton.setAttribute('value','Google');
+            currentEngin.setAttribute('action','http://www.google.com/search');
+            inputBar.setAttribute('name','q');
+        }else{
+            logo.classList.remove('active');
+            logo = document.querySelector('#searchEngin>li:nth-child(1)');
+            logo.classList.add('active');
+            searchButton.setAttribute('value','百度一下');
+            currentEngin.setAttribute('action','http://www.google.com/baidu');
+            inputBar.setAttribute('name','word');
+        }
+        baidu != baidu;
+    },false);
 }

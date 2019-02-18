@@ -1,18 +1,42 @@
 <!DOCTYPE html>
 <html lang="zh-Hans">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>导航网站</title>
     <link rel="stylesheet" href="./css/style.css">
+    <script src="//at.alicdn.com/t/font_961629_6mv5gitscxe.js"></script>
 </head>
+
 <body>
     <header></header>
     <main>
+        <form action="http://www.baidu.com/baidu" class="searchBar" target="_blank">
+            <div class="inputBar">
+                <input type="text" id="keyword" name="word">
+                <ul class="searchEngin" id="searchEngin">
+                    <li class="active">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-icswap"></use>
+                        </svg>
+                    </li>
+                    <li>
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-icswap"></use>
+                        </svg>
+                    </li>
+                </ul>
+            </div>
+            <div class="searchSwitch">
+                <input type="submit" name="button" class="google" id="searchButton" value="百度一下">
+            </div>
+        </form>
         <div class="wrapper" id="main"></div>
     </main>
     <footer></footer>
     <script src="./js/main.js"></script>
 </body>
+
 </html>
