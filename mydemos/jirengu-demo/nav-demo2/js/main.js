@@ -127,7 +127,7 @@ function listenToUser(hash) {
     document.onkeypress = function(e){
         var key = e['key'];
         var website = hash[key];
-        var currentKey=document.querySelector('.key.'+key)
+        var currentKey=document.querySelector('.key '+key)
 		currentKey.classList.add('down')
         //location.href='http://'+website
         //location代表地址栏，href代表地址
@@ -139,7 +139,7 @@ function listenToUser(hash) {
     }
     document.onkeyup = function(e){
         var key=keyup.key
-        var currentKey=document.querySelector('.key.'+key)
+        var currentKey=document.querySelector('.key '+key)
         currentKey.classList.remove('down')
     }
 
