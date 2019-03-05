@@ -25,7 +25,7 @@ var server = http.createServer(function(request, response){
   if(path === '/uptoken'){
     response.statusCode = 200
     response.setHeader('Content-Type', 'text/html;charset=utf-8')
-
+    response.setHeader('Access-Control-Allow-Origin', '*')
     var config = fs.readFileSync('./qiniu-key.json')
     config = JSON.parse(config)
 
@@ -39,7 +39,7 @@ var server = http.createServer(function(request, response){
 
     response.write(`
     {
-      'uptoken': '${uploadToken}'
+      "uptoken": "${uploadToken}"
     }
     `)
     response.end()

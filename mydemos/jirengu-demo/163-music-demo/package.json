@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "leancloud-storage": "^3.12.0",
-    "qiniu": "^7.2.1"
+    "qiniu": "^7.2.1",
+    "plupload": "^2.3.2",
+    "qiniu-js": "^1.0.22"
   }
 }
